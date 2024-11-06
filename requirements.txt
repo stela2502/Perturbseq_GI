@@ -16,4 +16,5 @@ seaborn
 scikit-learn
 statsmodels
 tqdm
+tsne
 umap-learn
