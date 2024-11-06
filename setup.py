@@ -4,9 +4,9 @@ with open("requirements.txt") as f:
     required = f.read().splitlines()
 
 setup(
-    name="my_package",
+    name="perturbseq",
     version="0.1.0",
-    packages=["my_package"],
+    packages=["perturbseq", "onesense", "maxide"],
     install_requires=required,
 )
 
