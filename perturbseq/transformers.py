@@ -16,7 +16,6 @@ import pandas as pd
 from sklearn.decomposition import PCA, FastICA
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.manifold import TSNE
-import tsne as tsne_bh
 from umap import UMAP
 
 def _prepare_dataframe(Z, index=None, columns=None, prefix=None):
@@ -170,17 +169,8 @@ class PCATSNEReducer(BaseEstimator, TransformerMixin):
             Y = X
             
         print('Performing TSNE...')
-        if self.use_sklearn:
-            Z = self.TSNE.fit_transform(Y)
-        else:
-            if isinstance(Y, pd.DataFrame):
-                Yp = Y.values
-            else:
-                Yp = Y.copy()
-            Z = tsne_bh.bh_sne(Yp,
-                               d=2,
-                               theta=self.angle,
-                               perplexity=self.perplexity)
+        Z = self.TSNE.fit_transform(Y)
+
         print('Done.')
         
         self.reduced_ = _prepare_dataframe(Z, index=X.index, prefix='TSNE')
