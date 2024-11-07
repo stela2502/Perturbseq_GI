@@ -18,3 +18,4 @@ statsmodels
 tqdm
 tsne
 umap-learn
+pytables
