@@ -490,7 +490,7 @@ class CellPopulation:
             
         # if the data matrix is sparse we densify it before iterating so that 
         # this operation is performed only once
-        if not data_normalized anddensify and isinstance(matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in matrix.dtypes):
+        if not data_normalized and densify and isinstance(matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in matrix.dtypes):
         #if not data_normalized and isinstance(self.matrix, pd.SparseDataFrame) and densify:
             sparsify = True
             self.densify_matrix()
