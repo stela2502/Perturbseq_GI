@@ -93,6 +93,9 @@ class CellPopulation:
         
         return cls(matrix, cell_list, gene_list, source=filename, normalized_matrix=normalized_matrix, calculate_statistics=False)
     
+
+
+
     def to_hdf(self, filename, store_normalized_matrix=False):
         """Write a Perturb-seq data set in HDF5 format. This is much faster than the matrix market exchange format.
         
@@ -104,16 +107,16 @@ class CellPopulation:
         """
         t = time()
         
-        with pd.HDFStore(filename) as store:
+        with pd.HDFStore(filename, mode="w") as store:
             print('Writing matrix...')
-            store.put('matrix', self.matrix)
+            store.put('matrix', self.matrix, format="table")
             if store_normalized_matrix and self.normalized_matrix is not None:
                 print('Writing normalized matrix...')
-                store.put('normalized_matrix', self.normalized_matrix)
+                store.put('normalized_matrix', self.normalized_matrix, format="table" )
             print('Writing metadata...')
             # hack because HDFStore complains about categorical columns
-            store.put('cell_list', _strip_cat_cols(self.cells))
-            store.put('gene_list', _strip_cat_cols(self.genes))
+            store.put('cell_list', _strip_cat_cols(self.cells), format="table")
+            store.put('gene_list', _strip_cat_cols(self.genes), format="table")
             
         print('Done in {0}s.'.format(time() - t))
         
@@ -249,8 +252,9 @@ class CellPopulation:
             matrix = self.normalized_matrix
         else:
             matrix = self.matrix
-            
-        if densify and isinstance(matrix, pd.SparseDataFrame):
+
+        if densify and isinstance(matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in matrix.dtypes):
+        #if densify and isinstance(matrix, pd.SparseDataFrame):
             if not normalized:
                 print('(where) Densifying matrix...')
             else:
@@ -486,7 +490,8 @@ class CellPopulation:
             
         # if the data matrix is sparse we densify it before iterating so that 
         # this operation is performed only once
-        if not data_normalized and isinstance(self.matrix, pd.SparseDataFrame) and densify:
+        if not data_normalized anddensify and isinstance(matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in matrix.dtypes):
+        #if not data_normalized and isinstance(self.matrix, pd.SparseDataFrame) and densify:
             sparsify = True
             self.densify_matrix()
         elif data_normalized and isinstance(self.normalized_matrix, pd.SparseDataFrame) and densify:

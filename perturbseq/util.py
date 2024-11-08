@@ -37,12 +37,10 @@ def _strip_cat_cols(df):
     cat_cols = df.select_dtypes('category').columns
     if len(cat_cols) > 0:
         print('! Converting categorical columns to string...')
-        out = df.copy()
         for col in cat_cols:
-            out[col] = out[col].astype('str')
-    else:
-        out = df
-    return out
+            df[col] = df[col].astype(str)
+
+    return df
     
 def gini(array):
     """Calculate the Gini coefficient of a numpy array."""
