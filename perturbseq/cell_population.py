@@ -92,8 +92,6 @@ class CellPopulation:
         print('Done in {0}s.'.format(time() - t))    
         
         return cls(matrix, cell_list, gene_list, source=filename, normalized_matrix=normalized_matrix, calculate_statistics=False)
-    
-
 
 
     def to_hdf(self, filename, store_normalized_matrix=False):
@@ -490,11 +488,11 @@ class CellPopulation:
             
         # if the data matrix is sparse we densify it before iterating so that 
         # this operation is performed only once
-        if not data_normalized and densify and isinstance(matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in matrix.dtypes):
+        if not data_normalized and densify and isinstance(self.matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in self.matrix.dtypes):
         #if not data_normalized and isinstance(self.matrix, pd.SparseDataFrame) and densify:
             sparsify = True
             self.densify_matrix()
-        elif data_normalized and isinstance(self.normalized_matrix, pd.SparseDataFrame) and densify:
+        elif data_normalized and  isinstance(self.normalized_matrix, pd.DataFrame) and any(isinstance(col, pd.SparseDtype) for col in self.normalized_matrix.dtypes):
             sparsify = True
             self.densify_normalized_matrix()
         else:
