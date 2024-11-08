@@ -183,7 +183,7 @@ def _prep_X_y(pop, key, cells=None, genes=None, normalized=True, feature_table=N
         test_gene = ignore[0]      
         if test_gene[0:4] != 'ENSG': # list of ensembl ids
             ignore = pop.gene_ids(ignore)
-        matrix.drop(ignore, inplace=True, axis=1, errors='ignore')
+        matrix = matrix.drop(ignore, axis=1, errors='ignore')
         
     # get class labels
     X = matrix.values

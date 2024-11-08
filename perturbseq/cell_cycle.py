@@ -174,7 +174,7 @@ def get_cell_phase(pop, gene_list=None, refine=False, threshold=0):
     # pick maximal score as the phase for that cell
     cell_cycle_scores['cell_cycle_phase'] = cell_cycle_scores.idxmax(axis=1)
     cell_cycle_scores['cell_cycle_phase'] = cell_cycle_scores['cell_cycle_phase'].astype('category')
-    cell_cycle_scores['cell_cycle_phase'].cat.set_categories(phase_list, inplace=True)
+    cell_cycle_scores['cell_cycle_phase'] = cell_cycle_scores['cell_cycle_phase'].cat.set_categories(phase_list)
 
     def progress_ratio(x, phase_list):
         ind = phase_list.index(x['cell_cycle_phase'])
@@ -205,7 +205,7 @@ def add_cell_cycle_scores(pop, gene_list=None):
     cell_cycle_scores = get_cell_phase(pop, refine=True, gene_list=gene_list, threshold=0.2)
     pop.add_property(cells=cell_cycle_scores)
     pop.cells['cell_cycle_phase'] = cell_cycle_scores['cell_cycle_phase'].astype('category')
-    pop.cells['cell_cycle_phase'].cat.set_categories(phase_list, inplace=True)
+    pop.cells['cell_cycle_phase'] = pop.cells['cell_cycle_phase'].cat.set_categories(phase_list)
     
 def cell_cycle_position_heatmap(pop, cells=None, **kwargs):
     """Plot a heatmap of cells ordered by cell cycle position
