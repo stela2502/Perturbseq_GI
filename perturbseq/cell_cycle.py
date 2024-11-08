@@ -29,7 +29,7 @@ def group_corr(population, gene_list):
     """
     # returns list of correlations of each gene within a list of genes with the total expression of the group
     expression_matrix = population.where(genes='gene_name in @gene_list', gene_names=True, gene_list=gene_list)
-    expression_matrix['total'] = expression_matrix.mean(axis=1)
+    expression_matrix.loc[:,'total'] = expression_matrix.mean(axis=1)
     return expression_matrix.corr()['total'][:-1] # delete last element which is total
 
 def refine_gene_list(population, gene_list, threshold, return_corrs=False):
